@@ -1,0 +1,884 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>Book Store</title>
+
+    <!-- for-mobile-apps -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <meta name="keywords" content="Super Market Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
+
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+
+    <script type="application/x-javascript">
+        addEventListener("load", function () {
+            setTimeout(hideURLbar, 0);
+        }, false);
+
+        function hideURLbar() {
+            window.scrollTo(0, 1);
+        }
+    </script>
+
+    <!-- //for-mobile-apps -->
+
+    <link href=" {%static 'css/bootstrap.css' %}" rel="stylesheet" type="text/css" media="all" />
+
+    <link href=" {%static 'css/style.css' %}" rel="stylesheet" type="text/css" media="all" />
+
+    <!-- font-awesome icons -->
+
+    <link href=" {%static 'css/font-awesome.css' %}" rel="stylesheet">
+
+    <!-- //font-awesome icons -->
+
+    <!-- js -->
+    <script>
+        function display_rating(star){
+            for (i = 0; i < star; i++) {
+            document.write('<i class="fa fa-star blue-star" aria-hidden="true"></i>');
+            }
+            for (j = 0; j < (5 - star); j++) {
+            document.write('<i class="fa fa-star gray-star" aria-hidden="true"></i>');
+            }
+        }
+    </script>
+
+    <script src=" {%static 'js/jquery-1.11.1.min.js' %}"></script>
+
+    <!-- //js -->
+
+    <link
+        href='//fonts.googleapis.com/css?family=Raleway:400,100,100italic,200,200italic,300,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic'
+        rel='stylesheet' type='text/css'>
+
+    <link
+        href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic'
+        rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .checked {
+            color: orange;
+        }
+    </style>
+
+    <!-- start-smoth-scrolling -->
+
+    <script type="text/javascript" src=" {%static 'js/move-top.js' %}"></script>
+
+    <script type="text/javascript" src=" {%static 'js/easing.js' %}"></script>
+
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+
+            $(".scroll").click(function (event) {
+
+                event.preventDefault();
+
+                $('html,body').animate({
+                    scrollTop: $(this.hash).offset().top
+                }, 1000);
+
+            });
+
+        });
+    </script>
+
+    <!-- start-smoth-scrolling -->
+
+</head>
+
+
+
+<body>
+
+    <!-- header -->
+
+    <div class="agileits_header">
+
+        <div class="container">
+
+            <div class="w3l_offers">
+
+                <p>SALE UP TO 70% OFF. <a href=" {% url 'products' 'Classic' %}">SHOP NOW</a></p>
+
+            </div>
+
+            <div class="agile-login">
+
+                <ul>
+                    {% if user.is_authenticated %}
+                    <li><a href=" {% url 'register' %}"> Welcome {{ request.user.username }} </a></li>
+                    <li><a href=" {% url 'logout' %}">Logout</a></li>
+                    {% else %}
+                    <li><a href=" {% url 'register' %}"> Create Account </a></li>
+                    <li><a href=" {% url 'login' %}">Login</a></li>
+                    {% endif %}
+
+                    <li><a href=" {% url 'contact' %}">Help</a></li>
+
+
+
+                </ul>
+
+            </div>
+
+            <div class="product_list_header">
+
+                <form action="{% url 'checkout' %}" method="post" class="last">{% csrf_token %}
+
+                    <!--
+                    <input type="hidden" name="cmd" value="_cart">
+
+                    <input type="hidden" name="display" value="1">
+                    -->
+
+                    <button type="submit" name="submit" value="">
+                        <i class="fa fa-cart-arrow-down" aria-hidden="true">
+                            <span class="counter counter-lg badge" id="books_cart_count">{{books_cart_count}}</span>
+                        </i>
+                    </button>
+
+                </form>
+
+            </div>
+
+            <div class="clearfix"> </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="logo_products">
+
+        <div class="container">
+
+            <div class="w3ls_logo_products_left1">
+
+                <ul class="phone_email">
+
+                    <li><i class="fa fa-phone" aria-hidden="true"></i>Order online or call us : +972559518504</li>
+
+
+
+                </ul>
+
+            </div>
+
+            <div class="w3ls_logo_products_left">
+
+                <h1><a href=" {% url 'home' %}">Book Store</a></h1>
+
+            </div>
+
+            <div class="w3l_search">
+
+                <form action="{% url 'search' %}" method="post">{% csrf_token %}
+
+                    <input type="search" name="search" placeholder="Search for a book..." required="">
+
+                    <button type="submit" class="btn btn-default search" aria-label="Left Align">
+
+                        <i class="fa fa-search" aria-hidden="true"> </i>
+
+                    </button>
+
+                    <div class="clearfix"></div>
+
+                </form>
+
+            </div>
+
+
+
+            <div class="clearfix"> </div>
+
+        </div>
+
+    </div>
+
+    <!-- //header -->
+
+    <!-- navigation -->
+
+    <div class="navigation-agileits">
+
+        <div class="container">
+
+            <nav class="navbar navbar-default">
+
+                <!-- Brand and toggle get grouped for better mobile display -->
+
+                <div class="navbar-header nav_2">
+
+                    <button type="button" class="navbar-toggle collapsed navbar-toggle1" data-toggle="collapse"
+                        data-target="#bs-megadropdown-tabs">
+
+                        <span class="sr-only">Toggle navigation</span>
+
+                        <span class="icon-bar"></span>
+
+                        <span class="icon-bar"></span>
+
+                        <span class="icon-bar"></span>
+
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse" id="bs-megadropdown-tabs">
+
+                    <ul class="nav navbar-nav">
+                        <style>
+                            .dropbtn {
+                              background-color: rgb(255, 143, 38);
+                              
+                              color: white;
+                              padding: 16px;
+                              font-size: 16px;
+                              border: none;
+                              cursor: pointer;
+                            }
+                            
+                            .dropbtn:hover, .dropbtn:focus {
+                              background-color: orange;
+                            }
+                            
+                            .dropdown {
+                              position: relative;
+                              display: inline-block;
+                            }
+                            
+                            .dropdown-content {
+                              display: none;
+                              position: absolute;
+                        
+                              background-color:  rgb(241, 147, 38);
+                              min-width: 160px;
+                              overflow: auto;
+                              box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                              z-index: 1;
+                            }
+                            
+                            .dropdown-content a {
+                              color: white;
+                              padding: 12px 16px;
+                              text-decoration: none;
+                              display: block;
+                            }
+                            
+                            .dropdown a:hover {background-color: orange;}
+                            
+                            .show {display: block;}
+                            </style>
+                            
+                            
+                            <div class="dropdown">
+                              <button onclick="myFunction()" class="dropbtn">Categories</button>
+                              <div id="myDropdown" class="dropdown-content">
+                                <a href=" {% url 'products' 'Classic' %}" class="act">Classic</a>
+                                <a href=" {% url 'products' 'Horror' %}" class="act">Horror</a>
+                                <a href=" {% url 'products' 'Biography' %}" class="act">Biography</a>
+                                <a href=" {% url 'products' 'Fiction' %}" class="act">Fiction</a>
+                                <a href=" {% url 'products' 'Comic' %}" class="act">Comic</a>
+                                <a href=" {% url 'products' 'Science' %}" class="act">Science</a>
+                                <a href=" {% url 'products' 'Self Development' %}" class="act">Self Development</a>
+                                <a href=" {% url 'products' 'Novel' %}" class="act">Novel</a>
+                                
+
+                        
+                              </div>
+                            </div>
+                            
+                            <script>
+                            
+                            function myFunction() {
+                              document.getElementById("myDropdown").classList.toggle("show");
+                            }
+                            
+                            
+                            window.onclick = function(event) {
+                              if (!event.target.matches('.dropbtn')) {
+                                var dropdowns = document.getElementsByClassName("dropdown-content");
+                                var i;
+                                for (i = 0; i < dropdowns.length; i++) {
+                                  var openDropdown = dropdowns[i];
+                                  if (openDropdown.classList.contains('show')) {
+                                    openDropdown.classList.remove('show');
+                                  }
+                                }
+                              }
+                            }
+                            </script>
+                            
+                            
+                        <li class="active"><a href=" {% url 'products' 'Classic' %}" class="act">Classic</a></li>
+                        <li class="active"><a href=" {% url 'products' 'Horror' %}" class="act">Horror</a></li>
+                        <li class="active"><a href=" {% url 'products' 'Biography' %}" class="act">Biography</a></li>
+                        <li class="active"><a href=" {% url 'products' 'Fiction' %}" class="act">Fiction</a></li>
+                        <li class="active"><a href=" {% url 'products' 'Comic' %}" class="act">Comic</a></li>
+                        <li class="active"><a href=" {% url 'products' 'Science' %}" class="act">Science</a></li>
+                      
+
+
+                        <!-- Mega Menu 
+
+                        <li class="dropdown">
+
+                            <a href=" {% url 'products' 'Classical' %}" class="dropdown-toggle" data-toggle="dropdown">Classical<b
+                                    class="caret"></b></a>
+                                
+                            <ul class="dropdown-menu multi-column columns-3">
+
+                                <div class="row">
+
+                                    <div class="multi-gd-img">
+
+                                        <ul class="multi-column-dropdown">
+
+                                            <h6>Classical</h6>
+
+                                            <li><a href=" {% url 'products' 'Classical' %}">Classical</a></li>
+
+                                            <li><a href="">Classical</a></li>
+
+                                            <li><a href="">Classical</a></li>
+
+                                            <li><a href="">Classical</a></li>
+
+                                            <li><a href="">Classical</a></li>
+
+                                            <li><a href="">Classical</a></li>
+
+                                        </ul>
+
+                                    </div>
+
+
+
+                                </div>
+
+                            </ul>
+                        
+
+                        </li>
+                    
+
+                        <li class="dropdown">
+
+                            <a href=" {%static '#' %}" class="dropdown-toggle" data-toggle="dropdown">Fiction<b
+                                    class="caret"></b></a>
+
+                            <ul class="dropdown-menu multi-column columns-3">
+
+                                <div class="row">
+
+                                    <div class="multi-gd-img">
+
+                                        <ul class="multi-column-dropdown">
+
+                                            <h6>Novel</h6>
+
+                                            <li><a href=" {%static 'household.html' %}">Cookware</a></li>
+
+                                            <li><a href=" {%static 'household.html' %}">Dust Pans</a></li>
+
+                                            <li><a href=" {%static 'household.html' %}">Scrubbers</a></li>
+
+                                            <li><a href=" {%static 'household.html' %}">Dust Cloth</a></li>
+
+                                            <li><a href=" {%static 'household.html' %}"> Mops </a></li>
+
+                                            <li><a href=" {%static 'household.html' %}">Kitchenware</a></li>
+
+                                        </ul>
+
+                                    </div>
+
+
+
+
+
+                                </div>
+
+                            </ul>
+
+                        </li>
+
+                        <li class="dropdown">
+
+                            <a href=" {%static '#' %}" class="dropdown-toggle" data-toggle="dropdown">Self Development<b
+                                    class="caret"></b></a>
+
+                            <ul class="dropdown-menu multi-column columns-3">
+
+                                <div class="row">
+
+                                    <div class="multi-gd-img">
+
+                                        <ul class="multi-column-dropdown">
+
+                                            <h6>Self Development</h6>
+
+                                            <li><a href=" {%static 'personalcare.html' %}">Self Development</a></li>
+
+                                            <li><a href=" {%static 'personalcare.html' %}">Self Development</a>
+                                            </li>
+
+                                            <li><a href=" {%static 'personalcare.html' %}">Self Development</a></li>
+
+                                            <li><a href=" {%static 'personalcare.html' %}">Self Development</a></li>
+
+                                            <li><a href=" {%static 'personalcare.html' %}">Self Development</a></li>
+
+                                            <li><a href=" {%static 'personalcare.html' %}">Self Development</a></li>
+
+                                        </ul>
+
+                                    </div>
+
+
+
+                                </div>
+
+                            </ul>
+
+                        </li>
+
+                        <li class="dropdown">
+
+                            <a href=" {%static '#' %}" class="dropdown-toggle" data-toggle="dropdown">Horror<b
+                                    class="caret"></b></a>
+
+                            <ul class="dropdown-menu multi-column columns-3">
+
+                                <div class="row">
+
+                                    <div class="multi-gd-img">
+
+                                        <ul class="multi-column-dropdown">
+
+                                            <h6>Horror</h6>
+
+                                            <li><a href=" {%static 'packagedfoods.html' %}">Horror</a></li>
+
+                                            <li><a href=" {%static 'packagedfoods.html' %}">Horror</a></li>
+
+                                            <li><a href=" {%static 'packagedfoods.html' %}">Horror</a></li>
+
+                                            <li><a href=" {%static 'packagedfoods.html' %}">Horror</a></li>
+
+                                            <li><a href=" {%static 'packagedfoods.html' %}">Horror</a></li>
+
+                                            <li><a href=" {%static 'packagedfoods.html' %}">Horror</a></li>
+
+                                        </ul>
+
+                                    </div>
+
+
+
+
+
+                                </div>
+
+                            </ul>
+
+                        </li>
+
+                        <li class="dropdown">
+
+                            <a href=" {%static '#' %}" class="dropdown-toggle" data-toggle="dropdown">Comic<b
+                                    class="caret"></b></a>
+
+                            <ul class="dropdown-menu multi-column columns-3">
+
+                                <div class="row">
+
+                                    <div class="multi-gd-img">
+
+                                        <ul class="multi-column-dropdown">
+
+                                            <h6>Comic</h6>
+
+                                            <li><a href=" {%static 'beverages.html' %}">comic </a></li>
+
+                                            <li><a href=" {%static 'beverages.html' %}">comic </a></li>
+
+                                            <li><a href=" {%static 'beverages.html' %}">comic </a></li>
+
+                                            <li><a href=" {%static 'beverages.html' %}">comic </a></li>
+
+                                            <li><a href=" {%static 'beverages.html' %}"> comic </a></li>
+
+                                            <li><a href=" {%static 'beverages.html' %}">comic </a></li>
+
+                                        </ul>
+
+                                    </div>
+
+
+
+                                </div>
+
+                            </ul>
+
+                        </li>
+                    -->
+
+                        <li><a href=" {% url 'recom' %}">Rcommendations</a></li>
+
+                        <li><a href=" {% url 'orders' %}">Orders</a></li>
+
+                        <li><a href=" {% url 'contact' %}">Contact</a></li>
+
+                    </ul>
+
+                </div>
+
+            </nav>
+
+        </div>
+
+    </div>
+
+    <!-- //navigation -->
+    {% block content %}
+    {% endblock %}
+
+    <!-- //footer -->
+
+    <div class="footer">
+
+        <div class="container">
+
+            <div class="w3_footer_grids">
+
+                <div class="col-md-3 w3_footer_grid">
+
+                    <h3>Contact</h3>
+
+
+
+                    <ul class="address">
+
+                        <li><i class="glyphicon glyphicon-map-marker" aria-hidden="true"></i>Ariel University
+                            <span>Ariel.</span></li>
+
+                        <li><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i><a
+                                href="mailto:info@example.com">BookStore@bookstore.com</a></li>
+
+                        <li><i class="glyphicon glyphicon-earphone" aria-hidden="true"></i>+972559518504</li>
+
+                    </ul>
+
+                </div>
+
+                <div class="col-md-3 w3_footer_grid">
+
+                    <h3>Information</h3>
+
+                    <ul class="info">
+
+                        <li><i class="fa fa-arrow-right" aria-hidden="true"></i><a href="{% url 'contact' %}">About
+                                Us</a></li>
+
+                        <li><i class="fa fa-arrow-right" aria-hidden="true"></i><a href="{% url 'contact' %}">Contact
+                                Us</a></li>
+
+
+
+                        <li><i class="fa fa-arrow-right" aria-hidden="true"></i><a href="{% url 'contact' %}">FAQ's</a>
+                        </li>
+
+                        <li><i class="fa fa-arrow-right" aria-hidden="true"></i><a href="{% url 'recom' %}">Special
+                                Products</a></li>
+
+                    </ul>
+
+                </div>
+
+                <div class="col-md-3 w3_footer_grid">
+
+                    <h3>Category</h3>
+
+                    <ul class="info">
+
+                        <li><i class="fa fa-arrow-right" aria-hidden="true"></i><a
+                                href="{% url 'products' 'Classic' %}">Classical</a></li>
+
+                        <li><i class="fa fa-arrow-right" aria-hidden="true"></i><a
+                                href="{% url 'products' 'Horror' %}">Horror</a></li>
+
+                        <li><i class="fa fa-arrow-right" aria-hidden="true"></i><a
+                                href="{% url 'products' 'Comic' %}">Comic</a></li>
+
+                        <li><i class="fa fa-arrow-right" aria-hidden="true"></i><a
+                                href="{% url 'products' 'Science' %}">Science</a></li>
+
+                        <li><i class="fa fa-arrow-right" aria-hidden="true"></i><a
+                                href="{% url 'products' 'Novel' %}">Novel</a></li>
+
+                    </ul>
+
+                </div>
+
+                <div class="col-md-3 w3_footer_grid">
+
+                    <h3>Profile</h3>
+
+                    <ul class="info">
+
+                        <li><i class="fa fa-arrow-right" aria-hidden="true"></i><a
+                                href=" {% url 'products' 'Classic' %}">Store</a></li>
+
+                        <li><i class="fa fa-arrow-right" aria-hidden="true"></i><a href=" {% url 'checkout' %}">My
+                                Cart</a></li>
+
+                        <li><i class="fa fa-arrow-right" aria-hidden="true"></i><a href=" {% url 'login'%}">Login</a>
+                        </li>
+
+                        <li><i class="fa fa-arrow-right" aria-hidden="true"></i><a href=" {% url 'register' %}">Create
+                                Account</a></li>
+
+                    </ul>
+
+                </div>
+
+                <div class="clearfix"> </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="footer-copy">
+
+
+
+            <div class="container">
+
+
+
+            </div>
+
+        </div>
+
+
+
+    </div>
+
+    <div class="footer-botm">
+
+        <div class="container">
+
+            <div class="w3layouts-foot">
+
+                <ul>
+
+                    <li><a href=" {%static '#' %}" class="w3_agile_facebook"><i class="fa fa-facebook"
+                                aria-hidden="true"></i></a></li>
+
+                    <li><a href=" {%static '#' %}" class="agile_twitter"><i class="fa fa-twitter"
+                                aria-hidden="true"></i></a></li>
+
+                    <li><a href=" {%static '#' %}" class="w3_agile_dribble"><i class="fa fa-dribbble"
+                                aria-hidden="true"></i></a></li>
+
+                    <li><a href=" {%static '#' %}" class="w3_agile_vimeo"><i class="fa fa-vimeo"
+                                aria-hidden="true"></i></a></li>
+
+                </ul>
+
+            </div>
+
+            <div class="payment-w3ls">
+
+                <img src=" {%static 'images/card.png' %}" alt=" " class="img-responsive">
+
+            </div>
+
+            <div class="clearfix"> </div>
+
+        </div>
+
+    </div>
+
+    <!-- //footer -->
+
+    <!-- Bootstrap Core JavaScript -->
+
+    <script src=" {%static 'js/bootstrap.min.js' %}"></script>
+
+
+
+    <!-- top-header and slider -->
+
+    <!-- here stars scrolling icon -->
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            /*
+    
+                var defaults = {
+    
+                containerID: 'toTop', // fading element id
+    
+                containerHoverID: 'toTopHover', // fading element hover id
+    
+                scrollSpeed: 1200,
+    
+                easingType: 'linear' 
+    
+                };
+    
+            */
+
+
+
+            $().UItoTop({
+                easingType: 'easeOutQuart'
+            });
+
+
+
+        });
+    </script>
+
+    <!-- //here ends scrolling icon -->
+
+    <script src=" {%static 'js/minicart.min.js' %}"></script>
+
+    <script>
+        // Mini Cart
+
+        paypal.minicart.render({
+
+            action: '#'
+
+        });
+
+
+
+        if (~window.location.search.indexOf('reset=true')) {
+
+            paypal.minicart.reset();
+
+        }
+    </script>
+
+    <!-- main slider-banner -->
+
+    <script src=" {%static 'js/skdslider.min.js' %}"></script>
+
+    <link href=" {%static 'css/skdslider.css' %}" rel="stylesheet">
+
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+
+            jQuery('#demo1').skdslider({
+                'delay': 5000,
+                'animationSpeed': 2000,
+                'showNextPrev': true,
+                'showPlayButton': true,
+                'autoSlide': true,
+                'animationType': 'fading'
+            });
+
+
+
+            jQuery('#responsive').change(function () {
+
+                $('#responsive_wrapper').width(jQuery(this).val());
+
+            });
+
+
+
+        });
+    </script>
+
+    <!-- //main slider-banner -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script> -->
+<!--     
+    <script type="text/javascript">
+        $('.button').click(function () {
+            var catid;
+            var csrf = $("input[name=csrfmiddlewaretoken]").val()
+
+            catid = $(this).attr("id");
+            book_name = $(this).attr("name");
+            alert(book_name + ' will be added to your cart');
+            $.ajax({
+                type: "POST",
+                url: "/add_book",
+                data: {
+                    post_id: catid,
+                    csrfmiddlewaretoken: csrf
+                },
+                success: function (data) {
+                    $('#like' + catid).remove();
+                    $('#message').text(data);
+                }
+            })
+        });
+    </script>
+
+    <script>
+        var req = new XMLHttpRequest();
+        req.open('GET','/books_cart_count');
+        req.onload = function(){
+            var data = JSON.parse(req.responseText);
+            console.log(data[0]);
+        };
+        req.send();
+    </script>
+ -->
+
+ {% if user.is_authenticated %}
+<script type="text/javascript">
+	$('.button').click(function () {
+		var csrf = $("input[name=csrfmiddlewaretoken]").val()
+		var book_id = $(this).attr("id");
+		console.log('book_id: ',book_id)
+		book_name = $(this).attr("name");
+		alert(book_name + ' will be added to your cart');
+		$.ajax({
+			type: "POST",
+			url: "/add_book",
+			data: {
+				post_id: book_id,
+				csrfmiddlewaretoken: csrf
+			},
+			success: function (data) {
+				$('#message').text(data);
+			}
+		});
+		var pre_count = Number($("#books_cart_count").text());
+		var post_count = pre_count+1
+		$("#books_cart_count").text(post_count);
+	});
+</script>
+{% else %}
+<script>
+	$('.button').click(function () {
+		alert('you need to login to add book in cart...');
+	});
+</script>
+{% endif %}
+
+</body>
+
+</html>

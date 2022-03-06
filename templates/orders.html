@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<!-- breadcrumbs -->
+<div class="breadcrumbs">
+    <div class="container">
+        <ol class="breadcrumb breadcrumb1">
+            <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>Home</a></li>
+            <li class="active">Orders Page</li>
+        </ol>
+    </div>
+</div>
+<!-- //breadcrumbs -->
+<!-- checkout -->
+
+<div class="checkout">
+
+    <div class="container">
+        {% if all_orders_count > 0%}
+        {% if delivered_orders_count > 0 %}
+        <h4>Waitting for feedback:</h4>
+        <br>
+        <div class="checkout-right">
+            <table class="timetable_sub">
+                <thead>
+                    <tr>
+                        <th>SL No.</th>
+                        <th>Product</th>
+                        <th>Product Name</th>
+                        <th>Rating</th>
+                        <th>Comment</th>
+                        <th>Submission</th>
+                    </tr>
+                </thead>
+                {% for order in delivered_orders %}
+                <tr class="rem1">
+                    <form action=" " method="POST">{% csrf_token %}
+                        <td class="invert">{{ forloop.counter }}</td>
+                        <td class="invert-image"><a href="{% url 'product_details' order.book.id %}"><img src="{{order.book.image.url}}"
+                                    style="height: 250px;width: 175px;" alt=" " class="img-responsive" /></a></td>
+                        <!--
+                    <td class="invert">
+                        <div class="quantity">
+                            <div class="quantity-select">
+                                <div class="entry value-minus">&nbsp;</div>
+                                <div class="entry value"><span>{{book.quantity}}</span></div>
+                                <div class="entry value-plus active">&nbsp;</div>
+                            </div>
+                        </div>
+                    </td>
+                    -->
+                        <td class="invert">{{order.book.name}}</td>
+
+                        <td class="invert">
+                            <div class="rating1">
+                                <span class="starRating">
+                                    <input id="{{order.book.id}}5" type="radio" name="rating" value="5">
+                                    <label for="{{order.book.id}}5">5</label>
+                                    <input id="{{order.book.id}}4" type="radio" name="rating" value="4">
+                                    <label for="{{order.book.id}}4">4</label>
+                                    <input id="{{order.book.id}}3" type="radio" name="rating" value="3">
+                                    <label for="{{order.book.id}}3">3</label>
+                                    <input id="{{order.book.id}}2" type="radio" name="rating" value="2">
+                                    <label for="{{order.book.id}}2">2</label>
+                                    <input id="{{order.book.id}}1" type="radio" name="rating" value="1">
+                                    <label for="{{order.book.id}}1">1</label>
+                                </span>
+                            </div>
+                        </td>
+                        <td class="invert">
+                            <textarea name="comment" id="" cols="35" rows="3"></textarea>
+                        </td>
+                        <input type="hidden" name="book_id" value="{{order.book.id}}">
+                        <input type="hidden" name="order_id" value="{{order.id}}">
+                        <td class="invert">
+                            <input type="submit" name="rated" value="Submit feedback">
+                        </td>
+                        <!--
+                    <td class="invert">
+                        <div class="rem">
+                            <div class="close1"> </div>
+                        </div>
+                        <script>
+                            $(document).ready(function (c) {
+                                $('.close1').on('click', function (c) {
+                                    $('.rem1').fadeOut('slow', function (c) {
+                                        $('.rem1').remove();
+                                    });
+                                });
+                            });
+                        </script>
+                    </td>
+                    -->
+                </tr>
+                </form>
+                {% endfor %}
+
+                <!--
+					<tr class="rem2">
+						<td class="invert">2</td>
+						<td class="invert-image"><a href="single.html"><img src="images/2.png" alt=" " class="img-responsive" /></a></td>
+						<td class="invert">
+							 <div class="quantity"> 
+								<div class="quantity-select">                           
+									<div class="entry value-minus">&nbsp;</div>
+									<div class="entry value"><span>1</span></div>
+									<div class="entry value-plus active">&nbsp;</div>
+								</div>
+							</div>
+						</td>
+						<td class="invert">Fortune oil</td>
+					
+						<td class="invert">$250.00</td>
+						<td class="invert">
+							<div class="rem">
+								<div class="close2"> </div>
+							</div>
+							<script>$(document).ready(function(c) {
+								$('.close2').on('click', function(c){
+									$('.rem2').fadeOut('slow', function(c){
+										$('.rem2').remove();
+									});
+									});	  
+								});
+						   </script>
+						</td>
+					</tr>
+					<tr class="rem3">
+						<td class="invert">3</td>
+						<td class="invert-image"><a href="single.html"><img src="images/3.png" alt=" " class="img-responsive" /></a></td>
+						<td class="invert">
+							 <div class="quantity"> 
+								<div class="quantity-select">                           
+									<div class="entry value-minus">&nbsp;</div>
+									<div class="entry value"><span>1</span></div>
+									<div class="entry value-plus active">&nbsp;</div>
+								</div>
+							</div>
+						</td>
+						<td class="invert">Aashirvaad atta</td>
+						
+						<td class="invert">$15.00</td>
+						<td class="invert">
+							<div class="rem">
+								<div class="close3"> </div>
+							</div>
+							<script>$(document).ready(function(c) {
+								$('.close3').on('click', function(c){
+									$('.rem3').fadeOut('slow', function(c){
+										$('.rem3').remove();
+									});
+									});	  
+								});
+						   </script>
+						</td>
+					</tr>
+				-->
+                <!--quantity-->
+                <script>
+                    $('.value-plus').on('click', function () {
+                        var divUpd = $(this).parent().find('.value'),
+                            newVal = parseInt(divUpd.text(), 10) + 1;
+                        divUpd.text(newVal);
+                    });
+
+                    $('.value-minus').on('click', function () {
+                        var divUpd = $(this).parent().find('.value'),
+                            newVal = parseInt(divUpd.text(), 10) - 1;
+                        if (newVal >= 1) divUpd.text(newVal);
+                    });
+                </script>
+                <!--quantity-->
+            </table>
+        </div>
+        {% endif %}
+        <br>
+
+        <h2>Your Orders:</h2>
+        <div class="checkout-right">
+            <table class="timetable_sub">
+                <thead>
+                    <tr>
+                        <th>SL No.</th>
+                        <th>Product</th>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                {% for order in all_orders %}
+                <tr class="rem1">
+                    <td class="invert">{{ forloop.counter }}</td>
+                    <td class="invert-image"><a href="{% url 'product_details' order.book.id %}"><img src="{{order.book.image.url}}"
+                                style="height: 300px;width: 200px;" alt=" " class="img-responsive" /></a></td>
+
+                    <td class="invert">{{order.book.name}}</td>
+                    <td class="invert">{{order.quantity}}</td>
+
+                    <td class="invert">{{order.book.price}}</td>
+                    <td class="invert">{{order.status}}</td>
+
+                </tr>
+                {% endfor %}
+
+
+                <script>
+                    $('.value-plus').on('click', function () {
+                        var divUpd = $(this).parent().find('.value'),
+                            newVal = parseInt(divUpd.text(), 10) + 1;
+                        divUpd.text(newVal);
+                    });
+
+                    $('.value-minus').on('click', function () {
+                        var divUpd = $(this).parent().find('.value'),
+                            newVal = parseInt(divUpd.text(), 10) - 1;
+                        if (newVal >= 1) divUpd.text(newVal);
+                    });
+                </script>
+                <!--quantity-->
+            </table>
+        </div>
+
+
+        <div class="checkout-right-basket">
+            <a href="{% url 'home' %}"><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>Continue
+                Shopping</a>
+        </div>
+        <div class="clearfix"> </div>
+        {% else %}
+        <h1 style="color: red; text-align:center;">Sorry, No orders found!!!</h1>
+        {% endif %}
+
+    </div>
+
+
+</div>
+</div>
+<!-- //checkout -->
+{% endblock %}

@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<!-- breadcrumbs -->
+<div class="breadcrumbs">
+	<div class="container">
+		<ol class="breadcrumb breadcrumb1 animated wow slideInLeft" data-wow-delay=".5s">
+			<li><a href="http://127.0.0.1:8000/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>Home</a></li>
+			<li class="active">Books</li>
+		</ol>
+	</div>
+</div>
+<!-- //breadcrumbs -->
+<!--- products --->
+<div class="products">
+	<div class="container">
+		<div class="col-md-4 products-left">
+			<div class="categories">
+				<h2>Categories</h2>
+				<ul class="cate">
+					<li><a href="{% url 'products' 'Classic' %}"><i class="fa fa-arrow-right"
+								aria-hidden="true"></i>Classic</a></li>
+
+					<li><a href="{% url 'products' 'Horror' %}"><i class="fa fa-arrow-right"
+								aria-hidden="true"></i>Horror</a></li>
+
+					<li><a href="{% url 'products' 'Fiction' %}"><i class="fa fa-arrow-right"
+								aria-hidden="true"></i>Fiction</a></li>
+
+					<li><a href="{% url 'products' 'Comic' %}"><i class="fa fa-arrow-right"
+								aria-hidden="true"></i>Comic</a></li>
+
+					<li><a href="{% url 'products' 'Science' %}"><i class="fa fa-arrow-right"
+								aria-hidden="true"></i>Science</a></li>
+
+					<li><a href="{% url 'products' 'Biography' %}"><i class="fa fa-arrow-right"
+								aria-hidden="true"></i>Biography</a></li>
+
+					<li><a href="{% url 'products' 'Self Development' %}"><i class="fa fa-arrow-right"
+								aria-hidden="true"></i>Self Development</a></li>
+
+					<li><a href="{% url 'products' 'Novel' %}"><i class="fa fa-arrow-right"
+								aria-hidden="true"></i>Novel</a></li>
+
+				</ul>
+			</div>
+		</div>
+		{% if all_books_count > 0 %}
+		<div class="col-md-8 products-right">
+			<div class="products-right-grid">
+				<div class="products-right-grids">
+					<!-- <div class="sorting">
+						<select id="country" onchange="change_country(this.value)" class="frm-field required sect">
+							<option value="null"><i class="fa fa-arrow-right" aria-hidden="true"></i>Default sorting
+							</option>
+							<option value="null"><i class="fa fa-arrow-right" aria-hidden="true"></i>Sort by popularity
+							</option>
+							<option value="null"><i class="fa fa-arrow-right" aria-hidden="true"></i>Sort by average
+								rating</option>
+							<option value="null"><i class="fa fa-arrow-right" aria-hidden="true"></i>Sort by price
+							</option>
+						</select>
+					</div>
+					<div class="sorting-left">
+						<select id="country1" onchange="change_country(this.value)" class="frm-field required sect">
+							<option value="null"><i class="fa fa-arrow-right" aria-hidden="true"></i>Item on page 9
+							</option>
+							<option value="null"><i class="fa fa-arrow-right" aria-hidden="true"></i>Item on page 18
+							</option>
+							<option value="null"><i class="fa fa-arrow-right" aria-hidden="true"></i>Item on page 32
+							</option>
+							<option value="null"><i class="fa fa-arrow-right" aria-hidden="true"></i>All</option>
+						</select>
+					</div> -->
+					<div class="clearfix"> </div>
+				</div>
+			</div>
+
+			{% for book in all_books %}
+			<div class="col-md-4 top_brand_left" style="padding: 5px;">
+				<div class="hover14 column">
+					<div class="agile_top_brand_left_grid">
+						<div class="agile_top_brand_left_grid_pos">
+							<!--
+							<img src="" alt=" " class="img-responsive">
+							-->
+						</div>
+						<div class="agile_top_brand_left_grid1">
+							<figure>
+								<div class="snipcart-item block">
+									<div class="snipcart-thumb">
+										<a href="{% url 'product_details' book.id %}"><img
+												style="height:250px;width:175px;" title=" " alt=" "
+												src="{{book.image.url}}"></a>
+												<p>{{book.name}}</p>
+												
+												<p>&#9733 {{book.rating}}</p>
+												{% if book.pre_discount_price > 0%}
+												<h4 style="color:rgb(5, 168, 54);">₪{{book.price}}<span style="color:rgb(226, 18, 11);">₪{{book.pre_discount_price}}</span></h4> 
+												{% else %}
+												<h4 style="color:rgb(5, 168, 54);">₪{{book.price}}</h4>   
+												{% endif %}
+												<p style="color:rgb(13, 15, 167);">{{book.author}}</p>
+												
+										                
+												
+									<div class="snipcart-details top_brand_home_details">
+										
+										{% csrf_token %}
+										<input type="submit" name="{{book.name}}" id={{book.id}} value="Add To Cart"
+											class="button">
+										
+
+										<!-- <script>
+											function added_book() {
+												var book_name =
+													alert(book_name + ' will be added to your cart');
+											}
+										</script> -->
+
+
+									</div>
+								</div>
+							</figure>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			{% endfor %}
+
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+			<!-- {% if user.is_authenticated %}
+			<script type="text/javascript">
+				$('.button').click(function () {
+					var catid;
+					var csrf = $("input[name=csrfmiddlewaretoken]").val()
+
+					catid = $(this).attr("id");
+					book_name = $(this).attr("name");
+					alert(book_name + ' will be added to your cart');
+					$.ajax({
+						type: "POST",
+						url: "/add_book",
+						data: {
+							post_id: catid,
+							csrfmiddlewaretoken: csrf
+						},
+						success: function (data) {
+							$('#like' + catid).remove();
+							$('#message').text(data);
+						}
+					});
+					var pre_count = Number($("#books_cart_count").text());
+					var post_count = pre_count+1
+					console.log(pre_count,post_count)
+					$("#books_cart_count").text(post_count);
+				});
+			</script>
+			{% else %}
+			<script>
+				$('.button').click(function () {
+					alert('you need to login to add book in cart...');
+				});
+			</script>
+			{% endif %}
+ -->
+
+			<div class="clearfix"> </div>
+		</div>
+
+		<nav class="numbering">
+			<ul class="pagination paging">
+				<li>
+					<a href="#" aria-label="Previous">
+						<span aria-hidden="true">&laquo;</span>
+					</a>
+				</li>
+				<li class="active"><a href="#">1<span class="sr-only">(current)</span></a></li>
+				<li><a href="#">2</a></li>
+				<li><a href="#">3</a></li>
+				<li><a href="#">4</a></li>
+				<li><a href="#">5</a></li>
+				<li>
+					<a href="#" aria-label="Next">
+						<span aria-hidden="true">&raquo;</span>
+					</a>
+				</li>
+			</ul>
+		</nav>
+		{% else %}
+		<h2 style="color: red; text-align:center;">Sorry, No book found!!!</h2>
+		{% endif %}
+	</div>
+	<div class="clearfix"> </div>
+</div>
+</div>
+<!--- products --->
+{% endblock %}

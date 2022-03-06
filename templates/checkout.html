@@ -1,0 +1,411 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<!-- breadcrumbs -->
+<div class="breadcrumbs">
+	<div class="container">
+		<ol class="breadcrumb breadcrumb1">
+			<li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>Home</a>
+			</li>
+			<li class="active">Checkout Page</li>
+		</ol>
+	</div>
+</div>
+<!-- //breadcrumbs -->
+<!-- checkout -->
+<div class="checkout">
+	<div class="container">
+		{% if cart_books_count > 0 %}
+		<h2>Your shopping cart contains: <span></span></h2>
+		<div class="checkout-right">
+			<table class="timetable_sub">
+				<thead>
+					<tr>
+						<th>SL No.</th>
+						<th>Product</th>
+						<th>Quantity</th>
+						<th>Product Name</th>
+						<th>Price</th>
+						<th>Remove</th>
+					</tr>
+				</thead>
+				{% for book in books_in_cart %}
+				<tr class="rem1" id="{{forloop.counter}}">
+					<td class="invert">{{ forloop.counter }}</td>
+					<td class="invert-image"><a href="single.html"><img src="{{book.book.image.url}}" alt=" "
+								style="height: 150px;width: 100px;" class="img-responsive" /></a></td>
+					<td class="invert">
+						<div class="quantity">
+							<div class="quantity-select">{% csrf_token %}
+								<div class="entry value-minus" id="{{book.book.id}}">&nbsp;</div>
+								<div class="entry value" id="bq{{book.book.id}}"><span>{{book.quantity}}</span></div>
+								<div class="entry value-plus active" id="{{book.book.id}}">&nbsp;</div>
+							</div>
+						</div>
+					</td>
+					<td class="invert">{{book.book.name}}</td>
+
+					<td class="invert" id="p{{book.book.id}}">{{book.book.price}}</td>
+					<td class="invert">
+						<div class="rem">{% csrf_token %}
+							<div class="close1" id="{{book.id}}" name="{{book.book.id}}"> </div>
+						</div>
+						<script>
+							// var r = {{book.id}};
+							$(document).ready(function (c) {
+								$('#{{book.id}}').on('click', function (c) {
+									$('#{{forloop.counter}}').fadeOut('slow', function (c) {
+										$('#{{forloop.counter}}').remove();
+									});
+								});
+							});
+						</script>
+					</td>
+				</tr>
+				{% endfor %}
+				<!--
+					<tr class="rem2">
+						<td class="invert">2</td>
+						<td class="invert-image"><a href="single.html"><img src="images/2.png" alt=" " class="img-responsive" /></a></td>
+						<td class="invert">
+							 <div class="quantity"> 
+								<div class="quantity-select">                           
+									<div class="entry value-minus">&nbsp;</div>
+									<div class="entry value"><span>1</span></div>
+									<div class="entry value-plus active">&nbsp;</div>
+								</div>
+							</div>
+						</td>
+						<td class="invert">Fortune oil</td>
+					
+						<td class="invert">$250.00</td>
+						<td class="invert">
+							<div class="rem">
+								<div class="close2"> </div>
+							</div>
+							<script>$(document).ready(function(c) {
+								$('.close2').on('click', function(c){
+									$('.rem2').fadeOut('slow', function(c){
+										$('.rem2').remove();
+									});
+									});	  
+								});
+						   </script>
+						</td>
+					</tr>
+					<tr class="rem3">
+						<td class="invert">3</td>
+						<td class="invert-image"><a href="single.html"><img src="images/3.png" alt=" " class="img-responsive" /></a></td>
+						<td class="invert">
+							 <div class="quantity"> 
+								<div class="quantity-select">                           
+									<div class="entry value-minus">&nbsp;</div>
+									<div class="entry value"><span>1</span></div>
+									<div class="entry value-plus active">&nbsp;</div>
+								</div>
+							</div>
+						</td>
+						<td class="invert">Aashirvaad atta</td>
+						
+						<td class="invert">$15.00</td>
+						<td class="invert">
+							<div class="rem">
+								<div class="close3"> </div>
+							</div>
+							<script>$(document).ready(function(c) {
+								$('.close3').on('click', function(c){
+									$('.rem3').fadeOut('slow', function(c){
+										$('.rem3').remove();
+									});
+									});	  
+								});
+						   </script>
+						</td>
+					</tr>
+				-->
+				<!--quantity-->
+				<script>
+					$('.value-plus').on('click', function () {
+						var divUpd = $(this).parent().find('.value'),
+							newVal = parseInt(divUpd.text(), 10) + 1;
+						divUpd.text(newVal);
+					});
+
+					$('.value-minus').on('click', function () {
+						var divUpd = $(this).parent().find('.value'),
+							newVal = parseInt(divUpd.text(), 10) - 1;
+						if (newVal >= 1) divUpd.text(newVal);
+					});
+				</script>
+				<!--quantity-->
+
+			</table>
+
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+			<script type="text/javascript">
+				$('.close1').click(function () {
+	
+					var csrf = $("input[name=csrfmiddlewaretoken]").val()
+
+					var item_id = $(this).attr("id");
+					var book_id = $(this).attr("name");
+					console.log(item_id,book_id);
+					var book_quntity = ($("#bq" + book_id).text());
+					var book_price = Number($("#p" + book_id).text());
+					var book_indv_price = book_quntity * book_price;
+					
+					console.log(book_quntity,'*',book_price,'=',book_indv_price);
+
+					// book_name = $(this).attr("name");
+					// alert(book_name + ' will be added to your cart');
+					$.ajax({
+						type: "POST",
+						url: "/del_book_from_cart",
+						data: {
+							post_id: item_id,
+							csrfmiddlewaretoken: csrf
+						},
+						success: function (data) {
+							$('#message').text(data);
+						}
+					});
+					var book_quntity = ($("#bq" + book_id).text());
+					var book_price = Number($("#p" + book_id).text());
+					var book_indv_price = book_quntity * book_price;
+					
+					console.log(book_quntity,'*',book_price,'=',book_indv_price);
+
+					var pre_count = Number($("#total").text());
+					var post_count = pre_count - book_indv_price;
+					console.log(pre_count,post_count);
+
+					$("#total").text(post_count);
+					$("#bp" + book_id).text('00');
+				});
+			</script>
+
+			<script type="text/javascript">
+				$('.value-plus').click(function () {
+					var book_id;
+					var csrf = $("input[name=csrfmiddlewaretoken]").val()
+
+					book_id = $(this).attr("id");
+					// book_name = $(this).attr("name");
+					// alert(book_name + ' will be added to your cart');
+					$.ajax({
+						type: "POST",
+						url: "/add_book",
+						data: {
+							post_id: book_id,
+							csrfmiddlewaretoken: csrf
+						},
+						success: function (data) {
+							// $('#like' + catid).remove();
+							$('#message').text(data);
+						}
+					});
+					var pre_count = Number($("#total").text());
+					var book_price = Number($("#p" + book_id).text());
+					var post_count = pre_count + book_price;
+					$("#total").text(post_count);
+
+					var book_quntity = ($("#bq" + book_id).text());
+					var book_indv_price = book_quntity * book_price;
+					$("#bp" + book_id).text(book_indv_price);
+					console.log(book_quntity,'*',book_price,'=',book_indv_price);
+
+				});
+			</script>
+
+
+
+			<script type="text/javascript">
+				$('.value-minus').click(function () {
+					var book_id;
+					var csrf = $("input[name=csrfmiddlewaretoken]").val()
+
+					book_id = $(this).attr("id");
+					// book_name = $(this).attr("name");
+					// alert(book_name + ' will be added to your cart');
+					$.ajax({
+						type: "POST",
+						url: "/remove_book",
+						data: {
+							post_id: book_id,
+							csrfmiddlewaretoken: csrf
+						},
+						success: function (data) {
+							// $('#like' + catid).remove();
+							$('#message').text(data);
+						}
+					});
+					var pre_count = Number($("#total").text());
+					var book_price = Number($("#p" + book_id).text())
+					var post_count = pre_count - book_price;
+					if (post_count > 0){
+					$("#total").text(post_count);
+					}
+
+					var book_quntity = ($("#bq" + book_id).text());
+					var book_indv_price = book_quntity * book_price;
+					$("#bp" + book_id).text(book_indv_price);
+					console.log(book_quntity,'*',book_price,'=',book_indv_price);
+				});
+			</script>
+
+
+		</div>
+		<br>
+		<div class="col-md-8 address_form">
+			<h3>Billing Address:</h3>
+			<br>
+
+			<form action="{% url 'checkout' %}" method="post" class="creditly-card-form shopf-sear-headinfo_form">
+				{% csrf_token %}
+
+				<div class="creditly-wrapper wrapper">
+
+					<div class="information-wrapper">
+
+						<div class="first-row form-group">
+
+							<div class="controls">
+
+								<label class="control-label">Full name: </label>
+
+								<input class="billing-address-name form-control" type="text" name="full_name"
+									placeholder="Full name" required>
+
+							</div>
+
+							<div class="card_number_grids">
+
+								<div class="card_number_grid_left">
+
+									<div class="controls">
+
+										<label class="control-label">Mobile number:</label>
+
+										<input class="form-control" type="text" name="phone" placeholder="Mobile number"
+											required>
+
+									</div>
+
+								</div>
+
+								<div class="card_number_grid_right">
+
+									<div class="controls">
+
+										<label class="control-label">Landmark: </label>
+
+										<input class="form-control" type="text" name="landmark" placeholder="Landmark"
+											required>
+
+									</div>
+
+								</div>
+
+								<div class="clear"> </div>
+
+							</div>
+
+							<div class="controls">
+
+								<label class="control-label">Town/City: </label>
+
+								<input class="form-control" type="text" name="city" placeholder="Town/City" required>
+
+							</div>
+
+							<div class="controls">
+
+								<label class="control-label">Address: </label>
+
+								<input class="form-control" type="text" name="address" placeholder="address" required>
+
+							</div>
+
+							<div class="controls">
+
+								<label class="control-label">Address type: </label>
+
+
+
+								<input type="radio" name="address_type" value="office" required> Office
+								<input type="radio" name="address_type" value="home" required> Home
+								<input type="radio" name="address_type" value="other" required> Other
+
+
+
+
+							</div>
+
+						</div>
+
+						<button type="submit" style="background-color:black;border: none;
+						color: white;
+						padding: 12px 32px;
+						text-align: center;
+						text-decoration: none;
+						display: inline-block;
+						font-size: 16px;" class="submit check_out" name="order">Place order</button>
+
+					</div>
+
+				</div>
+
+			</form>
+		</div>
+		<div class="checkout-left">
+			<div class="checkout-left-basket">
+				<!--
+				<form action="{% url 'checkout' %}" method="POST">{% csrf_token %}
+					<button type="submit" name="order" style="text-align: center;border: none;">
+						<h4>Continue to Order</h4>
+					</button>
+				</form>
+				-->
+				<br>
+				<ul>
+					{% for book in books_in_cart %}
+					<li id="bi{{book.book.id}}" name="{{book.book.id}}">{{book.book.name}} <i>-</i> <span
+							id="bp{{book.book.id}}">{{book.book.price}}</span></li>
+
+					<script>
+						$(document).ready(function () {
+							console.log("ready!");
+							var book_id = $("#bi" + {{book.book.id}}).attr("name");
+							var book_quntity = Number($("#bq" + book_id).text());
+							var book_price = Number($("#p" + book_id).text());
+							var book_indv_price = book_quntity * book_price;
+							$("#bp" + book_id).text(book_indv_price);
+							
+							console.log('data: ',book_id, book_quntity, book_price, book_indv_price);
+
+						});
+					</script>
+					{% endfor %}
+
+					<li>Total Service Charges <i>-</i> <span>$00.00</span></li>
+					<li>Total <i>-</i> <span id="total">{{total_price}}</span></li>
+				</ul>
+
+
+			</div>
+
+			{% else %}
+			<h1 style="color:{{message_color}}; text-align:center;">{{message}}</h1>
+			{% endif %}
+			<div class="checkout-right-basket">
+				<a href="{% url 'home' %}"><span class="glyphicon glyphicon-menu-left"
+						aria-hidden="true"></span>Continue
+					Shopping</a>
+			</div>
+			<div class="clearfix"> </div>
+		</div>
+	</div>
+</div>
+<!-- //checkout -->
+{% endblock %}

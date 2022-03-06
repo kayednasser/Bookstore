@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<!-- breadcrumbs -->
+<div class="breadcrumbs">
+	<div class="container">
+		<ol class="breadcrumb breadcrumb1 animated wow slideInLeft" data-wow-delay=".5s">
+			<li><a href="http://127.0.0.1:8000/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>Home</a></li>
+			<li class="active">Contact</li>
+		</ol>
+	</div>
+</div>
+<!-- //breadcrumbs -->
+
+{% for message in messages %}
+<div class="container">
+	<div class="alert alert-success text-center h5" role="alert">
+		{{message}}
+	</div>
+</div>
+{% endfor %}
+
+
+<!-- contact -->
+<div class="about">
+	<div class="w3_agileits_contact_grids">
+		<div class="col-md-6 w3_agileits_contact_grid_left">
+			<div class="agile_map">
+				<iframe
+					src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3379.74441943704!2d35.20990132157363!3d32.10319252543718!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151d27aa4f0daaf7%3A0x2ca995d16b10cd02!2z15DXldeg15nXkdeo16HXmdeY16og15DXqNeZ15DXnCDXkdep15XXnteo15XXnw!5e0!3m2!1siw!2sil!4v1607122917910!5m2!1siw!2sil"
+					style="border:0"></iframe>
+			</div>
+			<div class="agileits_w3layouts_map_pos">
+				<div class="agileits_w3layouts_map_pos1">
+					<h3>Contact Info</h3>
+					<p>Ariel University, Ariel.</p>
+					<ul class="wthree_contact_info_address">
+						<li><i class="fa fa-envelope" aria-hidden="true"></i><a
+								href="mailto:info@example.com">BookStore@bookstore.com</a></li>
+						<li><i class="fa fa-phone" aria-hidden="true"></i>+972559518504</li>
+					</ul>
+					<div class="w3_agile_social_icons w3_agile_social_icons_contact">
+						<ul>
+							<li><a href="#" class="icon icon-cube agile_facebook"></a></li>
+							<li><a href="#" class="icon icon-cube agile_rss"></a></li>
+							<li><a href="#" class="icon icon-cube agile_t"></a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 w3_agileits_contact_grid_right">
+			<h2 class="w3_agile_header">Leave a<span> Message</span></h2>
+
+			<form action="{% url 'contact' %}" method="post">{% csrf_token %}
+				<span class="input input--ichiro">
+					<input class="input__field input__field--ichiro" type="text" id="input-25" name="name"
+						placeholder=" " required="" />
+					<label class="input__label input__label--ichiro" for="input-25">
+						<span class="input__label-content input__label-content--ichiro">Your Name</span>
+					</label>
+				</span>
+				<span class="input input--ichiro">
+					<input class="input__field input__field--ichiro" type="email" id="input-26" name="email"
+						placeholder=" " required="" />
+					<label class="input__label input__label--ichiro" for="input-26">
+						<span class="input__label-content input__label-content--ichiro">Your Email</span>
+					</label>
+				</span>
+				<textarea name="message" placeholder="Your message here..." required=""></textarea>
+				<input type="submit" value="Submit">
+			</form>
+			<!-- <script>
+				function messageSubmit() {
+
+					alert('Your message is received');
+				}
+			</script> -->
+		</div>
+		<div class="clearfix"> </div>
+	</div>
+</div>
+<!-- contact -->
+
+{% endblock %}
